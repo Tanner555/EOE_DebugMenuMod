@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering.PostProcessing;
 using TMPro;
 
 //MyUIManager_ModInterface
@@ -15,10 +16,14 @@ namespace MyModTesting
         private bool b_doOnce = false;
         private bool bDebugMenuIsEnabled = false;
         private GameObject lastShownTextObject = null;
+        
         //Console Log Section
         bool bShowConsoleLogs = false;
         bool bOnlyShowWarnings = true;
-        int showLogFrequencyInSeconds = 1;
+        int showLogFrequencyInSeconds = 5;
+        //Bloom Intensity Section
+        bool bOverrideBloom = false;
+        float BloomIntensityValue = 0.0f;
         #endregion
 
         #region UIFields
@@ -29,6 +34,10 @@ namespace MyModTesting
         string OnlyShowWarningsToggleName = "OnlyShowWarningsToggle";
         string LogFrequencySliderName = "LogFrequencySlider";
         string LogFrequencyNumberTextName = "LogFrequencyNumberText";
+        //Bloom Intensity Section
+        string OverrideBloomToggleName = "OverrideBloomToggle";
+        string BloomIntensitySliderName = "BloomIntensitySlider";
+        string BloomIntensityNumberTextName = "BloomIntensityNumberText";
         //Printing Debug Info
         string DebugTextFieldName = "DebugTextField";
         string DebugInfoButtonName = "PrintDebugInfoButton";
@@ -40,9 +49,32 @@ namespace MyModTesting
         Toggle OnlyShowWarningsToggle;
         Slider LogFrequencySlider;
         TextMeshProUGUI LogFrequencyNumberText;
+        //Bloom Intensity Section
+        Toggle OverrideBloomToggle;
+        Slider BloomIntensitySlider;
+        TextMeshProUGUI BloomIntensityNumberText;
         //Printing Debug Info
         TextMeshProUGUI DebugTextField;
         Button DebugInfoButton;
+        #endregion
+
+        #region ComponentProperties
+        PostProcessLayer sceneProcessLayer
+        {
+            get
+            {
+                if(_sceneProcessLayer == null)
+                {
+                    var _processLayers = GameObject.FindObjectsOfType<PostProcessLayer>();
+                    if (_processLayers != null && _processLayers.Length > 0 && _processLayers[0] != null)
+                    {
+                        _sceneProcessLayer = _processLayers[0];
+                    }
+                }
+                return _sceneProcessLayer;
+            }
+        }
+        PostProcessLayer _sceneProcessLayer = null;
         #endregion
 
         #region Properties
@@ -70,7 +102,15 @@ namespace MyModTesting
 
             //if (Input.GetKeyDown(KeyCode.L))
             //{
-            //    SpawnFullScreenText("Hello There");
+            //    var _bloom = sceneProcessLayer.GetSettings<Bloom>();
+            //    if (_bloom != null)
+            //    {
+            //        SpawnFullScreenText("Bloom intensity is " + _bloom.intensity.value.ToString());
+            //    }
+            //    else
+            //    {
+            //        SpawnFullScreenText("Couldn't Obtain Bloom");
+            //    }
             //}
 
             //if (Input.GetKeyDown(KeyCode.J))
@@ -115,6 +155,20 @@ namespace MyModTesting
             if(bDebugMenuIsEnabled && LogFrequencyNumberText != null && LogFrequencyNumberText.enabled)
             {
                 LogFrequencyNumberText.text = showLogFrequencyInSeconds.ToString() + "S";
+            }
+        }
+        //Bloom Intensity Section
+        public void Toggle_OverrideBloomToggle(bool _enabled)
+        {
+            bOverrideBloom = _enabled;
+        }
+
+        public void Slider_BloomIntensitySlider(float _value)
+        {
+            BloomIntensityValue = _value;
+            if (bDebugMenuIsEnabled && BloomIntensityNumberText != null && BloomIntensityNumberText.enabled)
+            {
+                BloomIntensityNumberText.text = BloomIntensityValue.ToString();
             }
         }
         //Printing Debug Info
@@ -199,12 +253,22 @@ namespace MyModTesting
             if (LogFrequencySlider != null)
                 LogFrequencySlider.onValueChanged.RemoveAllListeners();
 
+            if (OverrideBloomToggle != null)
+                OverrideBloomToggle.onValueChanged.RemoveAllListeners();
+
+            if (BloomIntensitySlider != null)
+                BloomIntensitySlider.onValueChanged.RemoveAllListeners();
+
             DebugMenuCanvas = null;
             //Console Log Section
             ConsoleLogToggle = null;
             OnlyShowWarningsToggle = null;
             LogFrequencySlider = null;
             LogFrequencyNumberText = null;
+            //Bloom Intensity Section
+            OverrideBloomToggle = null;
+            BloomIntensitySlider = null;
+            BloomIntensityNumberText = null;
             //Print Debug Info
             DebugTextField = null;
             DebugInfoButton = null;
@@ -224,6 +288,11 @@ namespace MyModTesting
                     {
                         LogFrequencyNumberText = _textmesh;
                         LogFrequencyNumberText.text = showLogFrequencyInSeconds.ToString() + "S";
+                    }
+                    else if(_textmesh.transform.name == BloomIntensityNumberTextName)
+                    {
+                        BloomIntensityNumberText = _textmesh;
+                        BloomIntensityNumberText.text = BloomIntensityValue.ToString();
                     }
                 }
                 foreach (Button _button in DebugMenuCanvas.GetComponentsInChildren<Button>(true))
@@ -245,6 +314,12 @@ namespace MyModTesting
                         LogFrequencySlider.value = showLogFrequencyInSeconds;
                         LogFrequencySlider.onValueChanged.AddListener(Slider_LogFrequencySlider);
                     }
+                    else if(_slider.transform.name == BloomIntensitySliderName)
+                    {
+                        BloomIntensitySlider = _slider;
+                        BloomIntensitySlider.value = BloomIntensityValue;
+                        BloomIntensitySlider.onValueChanged.AddListener(Slider_BloomIntensitySlider);
+                    }
                 }
                 foreach (Toggle _toggle in DebugMenuCanvas.GetComponentsInChildren<Toggle>(true))
                 {
@@ -259,6 +334,12 @@ namespace MyModTesting
                         OnlyShowWarningsToggle = _toggle;
                         OnlyShowWarningsToggle.isOn = bOnlyShowWarnings;
                         OnlyShowWarningsToggle.onValueChanged.AddListener(Toggle_OnlyShowWarningsToggle);
+                    }
+                    else if(_toggle.transform.name == OverrideBloomToggleName)
+                    {
+                        OverrideBloomToggle = _toggle;
+                        OverrideBloomToggle.isOn = bOverrideBloom;
+                        OverrideBloomToggle.onValueChanged.AddListener(Toggle_OverrideBloomToggle);
                     }
                 }
             }
