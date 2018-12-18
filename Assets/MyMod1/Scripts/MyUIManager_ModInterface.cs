@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +15,9 @@ namespace MyModTesting
         private bool b_doOnce = false;
         private bool bDebugMenuIsEnabled = false;
         private GameObject lastShownTextObject = null;
-        
+        PostProcessVolume m_Volume = null;
+        PostProcessProfile m_Profile = null;
+
         //Console Log Section
         bool bShowConsoleLogs = false;
         bool bOnlyShowWarnings = true;
@@ -75,6 +76,43 @@ namespace MyModTesting
             }
         }
         PostProcessLayer _sceneProcessLayer = null;
+
+        PostProcessVolume sceneProcessVolume
+        {
+            get
+            {
+                if(_sceneProcessVolume == null)
+                {
+                    var _processVolumes = GameObject.FindObjectsOfType<PostProcessVolume>();
+                    if (_processVolumes != null && _processVolumes.Length > 0 && _processVolumes[0] != null)
+                    {
+                        _sceneProcessVolume = _processVolumes[0];
+                    }
+                }
+                return _sceneProcessVolume;
+            }
+        }
+        PostProcessVolume _sceneProcessVolume = null;
+
+        Bloom myBloomSettings
+        {
+            get
+            {
+                if(_myBloomSettings == null)
+                {
+                    if(sceneProcessVolume != null)
+                    {
+                        m_Profile = sceneProcessVolume.profile;
+                        if(!m_Profile.TryGetSettings<Bloom>(out _myBloomSettings))
+                        {
+                            _myBloomSettings = m_Profile.AddSettings<Bloom>();
+                        }
+                    }
+                }
+                return _myBloomSettings;
+            }
+        }
+        Bloom _myBloomSettings = null;
         #endregion
 
         #region Properties
@@ -102,10 +140,9 @@ namespace MyModTesting
 
             //if (Input.GetKeyDown(KeyCode.L))
             //{
-            //    var _bloom = sceneProcessLayer.GetSettings<Bloom>();
-            //    if (_bloom != null)
+            //    if(myBloomSettings != null)
             //    {
-            //        SpawnFullScreenText("Bloom intensity is " + _bloom.intensity.value.ToString());
+            //        SpawnFullScreenText("Bloom intensity is " + myBloomSettings.intensity.value.ToString() + " Threshold: " + myBloomSettings.threshold.value.ToString());
             //    }
             //    else
             //    {
@@ -132,6 +169,18 @@ namespace MyModTesting
             b_doOnce = true;
 
             LogCatcher.InitializeLogCatcher(SpawnFullScreenText);
+        }
+
+        public override void OnModDisabled()
+        {
+            if (m_Volume != null)
+            {
+                RuntimeUtilities.DestroyVolume(m_Volume, true, true);
+            }
+            if(m_Profile != null)
+            {
+                RuntimeUtilities.DestroyProfile(m_Profile, true);
+            }
         }
         #endregion
 
@@ -161,14 +210,22 @@ namespace MyModTesting
         public void Toggle_OverrideBloomToggle(bool _enabled)
         {
             bOverrideBloom = _enabled;
+            if(bOverrideBloom && myBloomSettings != null)
+            {
+                myBloomSettings.intensity.value = BloomIntensityValue;
+            }
         }
 
         public void Slider_BloomIntensitySlider(float _value)
         {
-            BloomIntensityValue = _value;
+            BloomIntensityValue = (float)System.Math.Round(_value, 2);
             if (bDebugMenuIsEnabled && BloomIntensityNumberText != null && BloomIntensityNumberText.enabled)
             {
                 BloomIntensityNumberText.text = BloomIntensityValue.ToString();
+            }
+            if (bOverrideBloom && myBloomSettings != null)
+            {
+                myBloomSettings.intensity.value = BloomIntensityValue;
             }
         }
         //Printing Debug Info
