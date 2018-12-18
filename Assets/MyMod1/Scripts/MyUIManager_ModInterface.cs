@@ -13,15 +13,32 @@ namespace MyModTesting
     {
         #region Fields
         private bool b_doOnce = false;
+        //Console Log Section
+        bool bShowConsoleLogs = false;
+        bool bOnlyShowWarnings = false;
+        int showLogFrequencyInSeconds = 1;
         #endregion
 
         #region UIFields
         //Used For Initialization
         private string DebugMenuCanvasName = "TestModCanvas1";
+        //Console Log Section
+        string ConsoleLogToggleName = "ConsoleLogToggle";
+        string OnlyShowWarningsToggleName = "OnlyShowWarningsToggle";
+        string LogFrequencySliderName = "LogFrequencySlider";
+        string LogFrequencyNumberTextName = "LogFrequencyNumberText";
+        //Printing Debug Info
         string DebugTextFieldName = "DebugTextField";
         string DebugInfoButtonName = "PrintDebugInfoButton";
 
+        //UI Components
         GameObject DebugMenuCanvas;
+        //Console Log Section
+        Toggle ConsoleLogToggle;
+        Toggle OnlyShowWarningsToggle;
+        Slider LogFrequencySlider;
+        TextMeshProUGUI LogFrequencyNumberText;
+        //Printing Debug Info
         TextMeshProUGUI DebugTextField;
         Button DebugInfoButton;
         #endregion
@@ -31,7 +48,11 @@ namespace MyModTesting
         {
             get
             {
-                return DebugMenuCanvas && DebugTextField && DebugInfoButton;
+                return DebugMenuCanvas &&
+                    //Console Log Section
+                    ConsoleLogToggle && OnlyShowWarningsToggle && LogFrequencySlider && LogFrequencyNumberText &&
+                    //Printing Debug Info
+                    DebugTextField && DebugInfoButton;
             }
         }
         #endregion
@@ -70,6 +91,22 @@ namespace MyModTesting
         #endregion
 
         #region PublicUICalls
+        //Console Log Section
+        public void Toggle_ConsoleLogToggle(bool _enabled)
+        {
+            bShowConsoleLogs = _enabled;
+        }
+
+        public void Toggle_OnlyShowWarningsToggle(bool _enabled)
+        {
+            bOnlyShowWarnings = _enabled;
+        }
+
+        public void Slider_LogFrequencySlider(float _value)
+        {
+            showLogFrequencyInSeconds = (int)_value;
+        }
+        //Printing Debug Info
         public void Btn_PrintDebugInfo()
         {
             if (bAllUIIsValid == false) return;
@@ -133,12 +170,27 @@ namespace MyModTesting
         {
             //Clear References
             if (DebugInfoButton != null)
-            {
                 DebugInfoButton.onClick.RemoveAllListeners();
-            }
+
+            if (ConsoleLogToggle != null)
+                ConsoleLogToggle.onValueChanged.RemoveAllListeners();
+
+            if (OnlyShowWarningsToggle != null)
+                OnlyShowWarningsToggle.onValueChanged.RemoveAllListeners();
+
+            if (LogFrequencySlider != null)
+                LogFrequencySlider.onValueChanged.RemoveAllListeners();
+
             DebugMenuCanvas = null;
+            //Console Log Section
+            ConsoleLogToggle = null;
+            OnlyShowWarningsToggle = null;
+            LogFrequencySlider = null;
+            LogFrequencyNumberText = null;
+            //Print Debug Info
             DebugTextField = null;
             DebugInfoButton = null;
+
             //Initialize UI Components
             var _canvas = GameObject.Find(DebugMenuCanvasName);
             if (_canvas != null)
@@ -150,6 +202,11 @@ namespace MyModTesting
                     {
                         DebugTextField = _textmesh;
                     }
+                    else if(_textmesh.transform.name == LogFrequencyNumberTextName)
+                    {
+                        LogFrequencyNumberText = _textmesh;
+                        LogFrequencyNumberText.text = showLogFrequencyInSeconds.ToString() + "S";
+                    }
                 }
                 foreach (Button _button in DebugMenuCanvas.GetComponentsInChildren<Button>(true))
                 {
@@ -160,6 +217,30 @@ namespace MyModTesting
                         {
                             Btn_PrintDebugInfo();
                         });
+                    }
+                }
+                foreach (Slider _slider in DebugMenuCanvas.GetComponentsInChildren<Slider>(true))
+                {
+                    if(_slider.transform.name == LogFrequencySliderName)
+                    {
+                        LogFrequencySlider = _slider;
+                        LogFrequencySlider.value = showLogFrequencyInSeconds;
+                        LogFrequencySlider.onValueChanged.AddListener(Slider_LogFrequencySlider);
+                    }
+                }
+                foreach (Toggle _toggle in DebugMenuCanvas.GetComponentsInChildren<Toggle>(true))
+                {
+                    if(_toggle.transform.name == ConsoleLogToggleName)
+                    {
+                        ConsoleLogToggle = _toggle;
+                        ConsoleLogToggle.isOn = bShowConsoleLogs;
+                        ConsoleLogToggle.onValueChanged.AddListener(Toggle_ConsoleLogToggle);
+                    }
+                    else if(_toggle.transform.name == OnlyShowWarningsToggleName)
+                    {
+                        OnlyShowWarningsToggle = _toggle;
+                        OnlyShowWarningsToggle.isOn = bOnlyShowWarnings;
+                        OnlyShowWarningsToggle.onValueChanged.AddListener(Toggle_OnlyShowWarningsToggle);
                     }
                 }
             }
