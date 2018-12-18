@@ -1,0 +1,52 @@
+Mixamo Beta Girl Model:
+ --- Settings
+ID: mixamo_beta_girl_model
+Name: Mixamo Beta Girl Model
+Author: IAmToxic500
+Version: 0.1
+Mod Text Description: Mixamo Beta Girl Model Swap For Selene
+Is Stanalone Adventure = false
+ --- Assets Override
+Source
+Path: Entities/Selen/Selene
+Load Method: Resources
+Replacement
+Path: MixamoBetaGirlModel
+Load Method: Asset Bundles Mod Kit
+DLC or ModID: mixamo_beta_girl_model
+
+Noctis Model Replacement For Daryon
+ --- Settings
+ID: noctis_model_replacement_for_daryon_iamtoxic500
+Name: Noctis Model Replacement For Daryon
+Author: IAmToxic500
+Version: 0.1
+Mod Text Description: Noctis Model Swap For Daryon
+Is Stanalone Adventure = false
+ --- Assets Override
+Source
+Path: Entities/Daryon/Daryon
+Load Method: Resources
+Replacement
+Path: NoctisModelPrefab
+Load Method: Asset Bundles Mod Kit
+DLC or ModID: noctis_model_replacement_for_daryon_iamtoxic500
+
+Test Scene Mod 1
+--- Settings
+ID: test_scene_mod_1
+Name: Test Scene Mod 1
+Author: IAmToxic500
+Version: 0.1
+Mod Text Description: A Test Mod For Adding Additive Scenes
+Is Stanalone Adventure = false
+
+--- Mod Scene Manager
+Scene Handling Mode: Additive
+Source
+Path: Assets/EOE/GameMaps/Chapters/Chapter I/AstryanContinent/AstryanContinent.unity
+Load Method: Resources
+Replacement
+Path: TestSceneMod1
+Load Method: Asset Bundles Mod Kit
+DLC or ModID: test_scene_mod_1
