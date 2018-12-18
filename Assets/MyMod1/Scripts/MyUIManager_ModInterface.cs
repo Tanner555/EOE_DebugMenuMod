@@ -14,6 +14,7 @@ namespace MyModTesting
         #region Fields
         private bool b_doOnce = false;
         private bool bDebugMenuIsEnabled = false;
+        private GameObject lastShownTextObject = null;
         //Console Log Section
         bool bShowConsoleLogs = false;
         bool bOnlyShowWarnings = true;
@@ -169,11 +170,15 @@ namespace MyModTesting
             }
         }
 
-        private static void SpawnFullScreenText(string msg)
+        private void SpawnFullScreenText(string msg)
         {
+            if(lastShownTextObject != null)
+            {
+                GameObject.Destroy(lastShownTextObject);
+            }
             var gob = Resources.Load("UI/FullScreenTextTimedUI") as GameObject;
-            var spawned = GameObject.Instantiate(gob);
-            spawned.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = msg;
+            lastShownTextObject = GameObject.Instantiate(gob);
+            lastShownTextObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = msg;
         }
         #endregion
 
