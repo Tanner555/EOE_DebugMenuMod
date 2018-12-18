@@ -161,6 +161,7 @@ namespace MyModTesting
                     bDebugMenuIsEnabled = _bActive;
                     if (_bActive)
                     {
+                        CoreWorker.instance.ShowCursor = true;
                         Cursor.lockState = CursorLockMode.None;
                         Cursor.visible = true;
                         //Only Initialize If Toggling Enabled
@@ -312,6 +313,19 @@ namespace MyModTesting
 
         //if (!GameMgr.HaveItem(853001))
         //    GameMgr.ModInventory(853001, 1);
+
+        //public void OpenUI(bool open)
+        //{
+        //    CoreWorker.instance.ShowCursor = open ? true : saveShowCursor;
+        //    PlayerController.instance.MoveLock = open ? true : saveMoveLock;
+        //    UIQuestLog.SetActivationState(open ? false : saveQuestLog);
+        //    //Time.timeScale = open ? 0.000001f : /*saveTimeScale*/1.0f;
+        //    GameMinimap.SetActivationState(open ? false : saveMinimapPresence);
+
+        //    PlayerController.instance.UIPresence = open;
+        //    (CameraMgr.GetCurrentExplorationCamera() as ExplorationFreeCamera).LockCam = open;
+        //    Cursor.visible = open;
+        //}
         #endregion
     }
 }
