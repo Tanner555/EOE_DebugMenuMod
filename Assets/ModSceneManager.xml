@@ -6,6 +6,6 @@
     <AffectedScenePath>Assets/EOE/GameMaps/Chapters/Chapter I/AstryanContinent/AstryanContinent.unity</AffectedScenePath>
     <ReplacementMethod>AssetBundlesModKit</ReplacementMethod>
     <ReplacementPath>TestSceneMod1</ReplacementPath>
-    <ReplacementModID>sample_new_item_mod</ReplacementModID>
+    <ReplacementModID>eoe_debug_menu_mod</ReplacementModID>
   </ModSceneManagerDescription>
 </ArrayOfModSceneManagerDescription>
