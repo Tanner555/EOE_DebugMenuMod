@@ -119,6 +119,8 @@
 #/Assets/Plugins.meta
 /Assets/StreamingAssets
 /Assets/StreamingAssets.meta
+WorkshopUpload
+WorkshopUpload.meta
 steam_api64.dll
 steam_appid.txt
 BuiltinDatabases.json

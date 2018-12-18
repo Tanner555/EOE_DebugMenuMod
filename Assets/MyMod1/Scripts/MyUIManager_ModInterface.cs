@@ -5,8 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.Rendering.PostProcessing;
 using TMPro;
 
-//MyUIManager_ModInterface
-//SampleNewItem_ModInterface
 namespace MyModTesting
 {
     public class MyUIManager_ModInterface : IModInterface

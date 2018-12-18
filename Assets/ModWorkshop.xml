@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<WorkshopModDescription xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ModSteamUGCID>1594326800</ModSteamUGCID>
+  <ModName>Debug Menu For Edge of Eternity</ModName>
+  <ModShortDescription>A Simple UI That Adds Debugging Functionality Into Edge of Eternity</ModShortDescription>
+  <ModDescription>A Simple UI That Adds Debugging Functionality Into Edge of Eternity</ModDescription>
+  <ModPreviewImagepath />
+  <TagStandalone>false</TagStandalone>
+  <TagMaps>false</TagMaps>
+  <TagQuests>false</TagQuests>
+  <TagItems>false</TagItems>
+  <TagSpells>false</TagSpells>
+  <TagNPCs>false</TagNPCs>
+  <TagMonsters>false</TagMonsters>
+  <TagFoods>false</TagFoods>
+  <TagCraftingRecipe>false</TagCraftingRecipe>
+  <TagSummons>false</TagSummons>
+  <TagModelSwaps>false</TagModelSwaps>
+  <TagMods>true</TagMods>
+</WorkshopModDescription>
