@@ -9,11 +9,13 @@ namespace MyModTesting
         #region Fields
         private static System.Action<string> ShowTextAction = null;
         //Timer
-        private static float timerThreshold = 10.0f;
         private static float nextTimer = 0.0f;
 
         private static Queue<MyLogStruct> logQueue = new Queue<MyLogStruct>();
         private static List<MyLogStruct> logReferenceList = new List<MyLogStruct>();
+
+        public static bool bOnlyShowWarnings = true;
+        public static int showLogFrequencyInSeconds = 1;
         #endregion
 
         #region Initialization
@@ -32,7 +34,10 @@ namespace MyModTesting
         {
             lock (logQueue)
             {
-                if (type == LogType.Assert || type == LogType.Error || type == LogType.Exception)
+                bool _bLogIsWarning = type == LogType.Assert || type == LogType.Error || type == LogType.Exception;
+                //Show All Log Types If OnlyShowWarnings Is False
+                //Otherwise Only Show Logs If Log Is An Error
+                if (bOnlyShowWarnings == false || _bLogIsWarning)
                 {
                     MyLogStruct _log = new MyLogStruct(condition, stacktrace, type);
                     foreach (MyLogStruct _logRef in logReferenceList)
@@ -71,7 +76,7 @@ namespace MyModTesting
         {
             if (Time.time > nextTimer)
             {
-                nextTimer = Time.time + timerThreshold;
+                nextTimer = Time.time + showLogFrequencyInSeconds;
                 return true;
             }
             return false;

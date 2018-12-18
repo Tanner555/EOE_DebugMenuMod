@@ -13,9 +13,10 @@ namespace MyModTesting
     {
         #region Fields
         private bool b_doOnce = false;
+        private bool bDebugMenuIsEnabled = false;
         //Console Log Section
         bool bShowConsoleLogs = false;
-        bool bOnlyShowWarnings = false;
+        bool bOnlyShowWarnings = true;
         int showLogFrequencyInSeconds = 1;
         #endregion
 
@@ -66,17 +67,20 @@ namespace MyModTesting
                 ToggleDebugUI();
             }
 
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                SpawnFullScreenText("Hello There");
-            }
+            //if (Input.GetKeyDown(KeyCode.L))
+            //{
+            //    SpawnFullScreenText("Hello There");
+            //}
 
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                LogCatcher.ClearLogQueue();
-            }
+            //if (Input.GetKeyDown(KeyCode.J))
+            //{
+            //    LogCatcher.ClearLogQueue();
+            //}
 
-            LogCatcher.UpdateLogCatcher();
+            if (bShowConsoleLogs)
+            {
+                LogCatcher.UpdateLogCatcher();
+            }
 
             if (b_doOnce)
             {
@@ -100,11 +104,17 @@ namespace MyModTesting
         public void Toggle_OnlyShowWarningsToggle(bool _enabled)
         {
             bOnlyShowWarnings = _enabled;
+            LogCatcher.bOnlyShowWarnings = bOnlyShowWarnings;
         }
 
         public void Slider_LogFrequencySlider(float _value)
         {
             showLogFrequencyInSeconds = (int)_value;
+            LogCatcher.showLogFrequencyInSeconds = showLogFrequencyInSeconds;
+            if(bDebugMenuIsEnabled && LogFrequencyNumberText != null && LogFrequencyNumberText.enabled)
+            {
+                LogFrequencyNumberText.text = showLogFrequencyInSeconds.ToString() + "S";
+            }
         }
         //Printing Debug Info
         public void Btn_PrintDebugInfo()
@@ -147,9 +157,11 @@ namespace MyModTesting
                 {
                     bool _bActive = !_panel.gameObject.activeSelf;
                     _panel.gameObject.SetActive(_bActive);
-                    Cursor.visible = _bActive;
+                    bDebugMenuIsEnabled = _bActive;
                     if (_bActive)
                     {
+                        Cursor.lockState = CursorLockMode.None;
+                        Cursor.visible = true;
                         //Only Initialize If Toggling Enabled
                         InitializeUIComponents();
                     }
