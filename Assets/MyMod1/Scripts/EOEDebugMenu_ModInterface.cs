@@ -7,7 +7,7 @@ using TMPro;
 
 namespace MyModTesting
 {
-    public class MyUIManager_ModInterface : IModInterface
+    public class EOEDebugMenu_ModInterface : IModInterface
     {
         #region Fields
         private bool b_doOnce = false;
