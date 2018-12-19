@@ -316,6 +316,82 @@ namespace MyModTesting
                 b_firstTimeInitUI = false;
                 InitializeDefaultValues();
             }
+
+            ClearUIComponentReferences();
+
+            var _canvas = GameObject.Find(DebugMenuCanvasName);
+            //Don't Init Components If Can't Find Canvas In Scene
+            if (_canvas == null) return;
+            //Initialize UI Components
+            DebugMenuCanvas = _canvas;
+            foreach (TextMeshProUGUI _textmesh in DebugMenuCanvas.GetComponentsInChildren<TextMeshProUGUI>(true))
+            {
+                if (_textmesh.transform.name == DebugTextFieldName)
+                {
+                    DebugTextField = _textmesh;
+                }
+                else if (_textmesh.transform.name == LogFrequencyNumberTextName)
+                {
+                    LogFrequencyNumberText = _textmesh;
+                    LogFrequencyNumberText.text = showLogFrequencyInSeconds.ToString() + "S";
+                }
+                else if (_textmesh.transform.name == BloomIntensityNumberTextName)
+                {
+                    BloomIntensityNumberText = _textmesh;
+                    BloomIntensityNumberText.text = BloomIntensityValue.ToString();
+                }
+            }
+            foreach (Button _button in DebugMenuCanvas.GetComponentsInChildren<Button>(true))
+            {
+                if (_button.transform.name == DebugInfoButtonName)
+                {
+                    DebugInfoButton = _button;
+                    DebugInfoButton.onClick.AddListener(() =>
+                    {
+                        Btn_PrintDebugInfo();
+                    });
+                }
+            }
+            foreach (Slider _slider in DebugMenuCanvas.GetComponentsInChildren<Slider>(true))
+            {
+                if (_slider.transform.name == LogFrequencySliderName)
+                {
+                    LogFrequencySlider = _slider;
+                    LogFrequencySlider.value = showLogFrequencyInSeconds;
+                    LogFrequencySlider.onValueChanged.AddListener(Slider_LogFrequencySlider);
+                }
+                else if (_slider.transform.name == BloomIntensitySliderName)
+                {
+                    BloomIntensitySlider = _slider;
+                    BloomIntensitySlider.value = BloomIntensityValue;
+                    BloomIntensitySlider.onValueChanged.AddListener(Slider_BloomIntensitySlider);
+                }
+            }
+            foreach (Toggle _toggle in DebugMenuCanvas.GetComponentsInChildren<Toggle>(true))
+            {
+                if (_toggle.transform.name == ConsoleLogToggleName)
+                {
+                    ConsoleLogToggle = _toggle;
+                    ConsoleLogToggle.isOn = bShowConsoleLogs;
+                    ConsoleLogToggle.onValueChanged.AddListener(Toggle_ConsoleLogToggle);
+                }
+                else if (_toggle.transform.name == OnlyShowWarningsToggleName)
+                {
+                    OnlyShowWarningsToggle = _toggle;
+                    OnlyShowWarningsToggle.isOn = bOnlyShowWarnings;
+                    OnlyShowWarningsToggle.onValueChanged.AddListener(Toggle_OnlyShowWarningsToggle);
+                }
+                else if (_toggle.transform.name == OverrideBloomToggleName)
+                {
+                    OverrideBloomToggle = _toggle;
+                    OverrideBloomToggle.isOn = bOverrideBloom;
+                    OverrideBloomToggle.onValueChanged.AddListener(Toggle_OverrideBloomToggle);
+                }
+            }
+        }
+
+        private void ClearUIComponentReferences()
+        {
             //Clear References
             if (DebugInfoButton != null)
                 DebugInfoButton.onClick.RemoveAllListeners();
@@ -348,77 +424,6 @@ namespace MyModTesting
             //Print Debug Info
             DebugTextField = null;
             DebugInfoButton = null;
-
-            //Initialize UI Components
-            var _canvas = GameObject.Find(DebugMenuCanvasName);
-            if (_canvas != null)
-            {
-                DebugMenuCanvas = _canvas;
-                foreach (TextMeshProUGUI _textmesh in DebugMenuCanvas.GetComponentsInChildren<TextMeshProUGUI>(true))
-                {
-                    if (_textmesh.transform.name == DebugTextFieldName)
-                    {
-                        DebugTextField = _textmesh;
-                    }
-                    else if(_textmesh.transform.name == LogFrequencyNumberTextName)
-                    {
-                        LogFrequencyNumberText = _textmesh;
-                        LogFrequencyNumberText.text = showLogFrequencyInSeconds.ToString() + "S";
-                    }
-                    else if(_textmesh.transform.name == BloomIntensityNumberTextName)
-                    {
-                        BloomIntensityNumberText = _textmesh;
-                        BloomIntensityNumberText.text = BloomIntensityValue.ToString();
-                    }
-                }
-                foreach (Button _button in DebugMenuCanvas.GetComponentsInChildren<Button>(true))
-                {
-                    if (_button.transform.name == DebugInfoButtonName)
-                    {
-                        DebugInfoButton = _button;
-                        DebugInfoButton.onClick.AddListener(() =>
-                        {
-                            Btn_PrintDebugInfo();
-                        });
-                    }
-                }
-                foreach (Slider _slider in DebugMenuCanvas.GetComponentsInChildren<Slider>(true))
-                {
-                    if(_slider.transform.name == LogFrequencySliderName)
-                    {
-                        LogFrequencySlider = _slider;
-                        LogFrequencySlider.value = showLogFrequencyInSeconds;
-                        LogFrequencySlider.onValueChanged.AddListener(Slider_LogFrequencySlider);
-                    }
-                    else if(_slider.transform.name == BloomIntensitySliderName)
-                    {
-                        BloomIntensitySlider = _slider;
-                        BloomIntensitySlider.value = BloomIntensityValue;
-                        BloomIntensitySlider.onValueChanged.AddListener(Slider_BloomIntensitySlider);
-                    }
-                }
-                foreach (Toggle _toggle in DebugMenuCanvas.GetComponentsInChildren<Toggle>(true))
-                {
-                    if(_toggle.transform.name == ConsoleLogToggleName)
-                    {
-                        ConsoleLogToggle = _toggle;
-                        ConsoleLogToggle.isOn = bShowConsoleLogs;
-                        ConsoleLogToggle.onValueChanged.AddListener(Toggle_ConsoleLogToggle);
-                    }
-                    else if(_toggle.transform.name == OnlyShowWarningsToggleName)
-                    {
-                        OnlyShowWarningsToggle = _toggle;
-                        OnlyShowWarningsToggle.isOn = bOnlyShowWarnings;
-                        OnlyShowWarningsToggle.onValueChanged.AddListener(Toggle_OnlyShowWarningsToggle);
-                    }
-                    else if(_toggle.transform.name == OverrideBloomToggleName)
-                    {
-                        OverrideBloomToggle = _toggle;
-                        OverrideBloomToggle.isOn = bOverrideBloom;
-                        OverrideBloomToggle.onValueChanged.AddListener(Toggle_OverrideBloomToggle);
-                    }
-                }
-            }
         }
 
         void InitializeDefaultValues()
