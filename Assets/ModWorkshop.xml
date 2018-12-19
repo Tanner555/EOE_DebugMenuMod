@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <WorkshopModDescription xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ModSteamUGCID>1594326800</ModSteamUGCID>
-  <ModName>Debug Menu For Edge of Eternity</ModName>
+  <ModSteamUGCID>1594606336</ModSteamUGCID>
+  <ModName>EOE Debug Menu</ModName>
   <ModShortDescription>A Simple UI That Adds Debugging Functionality Into Edge of Eternity</ModShortDescription>
   <ModDescription>A Simple UI That Adds Debugging Functionality Into Edge of Eternity</ModDescription>
-  <ModPreviewImagepath />
+  <ModPreviewImagepath>E:/Extra Content Folder/My Projects/Unity Projects/EOE_DebugMenuMod/Assets/ModPic.jpg</ModPreviewImagepath>
   <TagStandalone>false</TagStandalone>
   <TagMaps>false</TagMaps>
   <TagQuests>false</TagQuests>
