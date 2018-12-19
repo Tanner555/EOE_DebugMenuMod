@@ -41,6 +41,9 @@ namespace MyModTesting
         public static string OverrideBloomToggleName = "OverrideBloomToggle";
         public static string BloomIntensitySliderName = "BloomIntensitySlider";
         public static string BloomIntensityNumberTextName = "BloomIntensityNumberText";
+        //Bloom Threshold Section
+        public static string BloomThresholdSliderName = "BloomThresholdSlider";
+        public static string BloomThresholdNumberTextName = "BloomThresholdNumberText";
         //Printing Debug Info
         public static string DebugTextFieldName = "DebugTextField";
         public static string DebugInfoButtonName = "PrintDebugInfoButton";
@@ -56,6 +59,9 @@ namespace MyModTesting
         public static Toggle OverrideBloomToggle;
         public static Slider BloomIntensitySlider;
         public static TextMeshProUGUI BloomIntensityNumberText;
+        //Bloom Threshold Section
+        public static Slider BloomThresholdSlider;
+        public static TextMeshProUGUI BloomThresholdNumberText;
         //Printing Debug Info
         public static TextMeshProUGUI DebugTextField;
         public static Button DebugInfoButton;
@@ -120,6 +126,19 @@ namespace MyModTesting
             if (bOverrideBloom && myBloomSettings != null)
             {
                 myBloomSettings.intensity.value = BloomIntensityValue;
+            }
+        }
+
+        public static void Slider_BloomThresholdSlider(float _value)
+        {
+            BloomThresholdValue = (float)System.Math.Round(_value, 2);
+            if (bDebugMenuIsEnabled && BloomThresholdNumberText != null && BloomThresholdNumberText.enabled)
+            {
+                BloomThresholdNumberText.text = BloomThresholdValue.ToString();
+            }
+            if (bOverrideBloom && myBloomSettings != null)
+            {
+                myBloomSettings.threshold.value = BloomThresholdValue;
             }
         }
         //Printing Debug Info
@@ -224,6 +243,11 @@ namespace MyModTesting
                     BloomIntensityNumberText = _textmesh;
                     BloomIntensityNumberText.text = BloomIntensityValue.ToString();
                 }
+                else if (_textmesh.transform.name == BloomThresholdNumberTextName)
+                {
+                    BloomThresholdNumberText = _textmesh;
+                    BloomThresholdNumberText.text = BloomThresholdValue.ToString();
+                }
             }
             foreach (Button _button in DebugMenuCanvas.GetComponentsInChildren<Button>(true))
             {
@@ -249,6 +273,12 @@ namespace MyModTesting
                     BloomIntensitySlider = _slider;
                     BloomIntensitySlider.value = BloomIntensityValue;
                     BloomIntensitySlider.onValueChanged.AddListener(Slider_BloomIntensitySlider);
+                }
+                else if(_slider.transform.name == BloomThresholdSliderName)
+                {
+                    BloomThresholdSlider = _slider;
+                    BloomThresholdSlider.value = BloomThresholdValue;
+                    BloomThresholdSlider.onValueChanged.AddListener(Slider_BloomThresholdSlider);
                 }
             }
             foreach (Toggle _toggle in DebugMenuCanvas.GetComponentsInChildren<Toggle>(true))
@@ -300,6 +330,9 @@ namespace MyModTesting
             if (LogFrequencySlider != null)
                 LogFrequencySlider.onValueChanged.RemoveAllListeners();
 
+            if (BloomThresholdSlider != null)
+                BloomThresholdSlider.onValueChanged.RemoveAllListeners();
+
             if (OverrideBloomToggle != null)
                 OverrideBloomToggle.onValueChanged.RemoveAllListeners();
 
@@ -316,6 +349,9 @@ namespace MyModTesting
             OverrideBloomToggle = null;
             BloomIntensitySlider = null;
             BloomIntensityNumberText = null;
+            //Bloom Threshold Section
+            BloomThresholdSlider = null;
+            BloomThresholdNumberText = null;
             //Print Debug Info
             DebugTextField = null;
             DebugInfoButton = null;
