@@ -11,6 +11,7 @@ namespace MyModTesting
     {
         #region Fields
         private bool b_doOnce = false;
+        private bool b_firstTimeInitUI = true;
         private bool bDebugMenuIsEnabled = false;
         private GameObject lastShownTextObject = null;
         PostProcessVolume m_Volume = null;
@@ -23,8 +24,12 @@ namespace MyModTesting
         //Bloom Intensity Section
         bool bOverrideBloom = false;
         float BloomIntensityValue = 0.0f;
+        float BloomThresholdValue = 0.0f;
+        //Should only be set when initialization bloom
+        float BloomIntensityDefaultValue = 1.6f;
+        float BloomThresholdDefaultValue = 0.5f;
         #endregion
-
+        
         #region UIFields
         //Used For Initialization
         private string DebugMenuCanvasName = "TestModCanvas1";
@@ -208,9 +213,12 @@ namespace MyModTesting
         public void Toggle_OverrideBloomToggle(bool _enabled)
         {
             bOverrideBloom = _enabled;
-            if(bOverrideBloom && myBloomSettings != null)
+            if(myBloomSettings != null)
             {
-                myBloomSettings.intensity.value = BloomIntensityValue;
+                //Set the Value To It's Slider Value if Override
+                //Is True, Otherwise Use Default Value
+                myBloomSettings.intensity.value = bOverrideBloom ?
+                    BloomIntensityValue : BloomIntensityDefaultValue;
             }
         }
 
@@ -295,6 +303,11 @@ namespace MyModTesting
         #region Initialization
         void InitializeUIComponents()
         {
+            if (b_firstTimeInitUI)
+            {
+                b_firstTimeInitUI = false;
+                InitializeDefaultValues();
+            }
             //Clear References
             if (DebugInfoButton != null)
                 DebugInfoButton.onClick.RemoveAllListeners();
@@ -397,6 +410,17 @@ namespace MyModTesting
                         OverrideBloomToggle.onValueChanged.AddListener(Toggle_OverrideBloomToggle);
                     }
                 }
+            }
+        }
+
+        void InitializeDefaultValues()
+        {
+            //Set Default Values
+            Bloom _sceneBloom;
+            if (sceneProcessLayer != null && (_sceneBloom = sceneProcessLayer.GetSettings<Bloom>()) != null)
+            {
+                BloomIntensityDefaultValue = _sceneBloom.intensity.value;
+                BloomThresholdDefaultValue = _sceneBloom.threshold.value;
             }
         }
         #endregion
