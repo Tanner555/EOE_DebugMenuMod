@@ -274,13 +274,21 @@ namespace MyModTesting
                 if (_panel != null && _panel.gameObject)
                 {
                     bool _bActive = !_panel.gameObject.activeSelf;
+                    if(_bActive && (PlayerController.instance.UIPresence ||
+                        PlayerController.instance.MoveLock))
+                    {
+                        //Do Not Activate Debug Menu If Another UI Is Present Or Player Cannot Move
+                        return;
+                    }
                     _panel.gameObject.SetActive(_bActive);
                     bDebugMenuIsEnabled = _bActive;
+                    (CameraMgr.GetCurrentExplorationCamera() as ExplorationFreeCamera).LockCam = _bActive;
+                    PlayerController.instance.UIPresence = _bActive;
+                    PlayerController.instance.MoveLock = _bActive;
+                    CoreWorker.instance.ShowCursor = _bActive;
+                    Cursor.visible = _bActive;
                     if (_bActive)
                     {
-                        CoreWorker.instance.ShowCursor = true;
-                        Cursor.lockState = CursorLockMode.None;
-                        Cursor.visible = true;
                         //Only Initialize If Toggling Enabled
                         InitializeUIComponents();
                     }
@@ -424,8 +432,24 @@ namespace MyModTesting
             }
         }
         #endregion
-
+        
         #region UnusedCode
+        /// <summary>
+        /// bCanToggleDebugMenu Doesn't Seem To Work Properly Right Now.
+        /// Always Seems To Return False
+        /// </summary>
+        //bool bCanToggleDebugMenu
+        //{
+        //    get
+        //    {
+        //        return bAllUIIsValid &&
+        //            PlayerController.instance.UIPresence == false &&
+        //            PlayerController.instance.MoveLock == false;
+        //    }
+        //}
+
+        //SpawnFullScreenText($"UiPresence: {PlayerController.instance.UIPresence.ToString()}, MoveLock: {PlayerController.instance.MoveLock.ToString()}");
+
         //private string MyCanvasPanelName = "TestModCanvas1Panel";
         //Do not use tags
         //private string MyCanvasTag = "SimpleModCanvas";
