@@ -44,6 +44,8 @@ namespace MyModTesting
         //Bloom Threshold Section
         public static string BloomThresholdSliderName = "BloomThresholdSlider";
         public static string BloomThresholdNumberTextName = "BloomThresholdNumberText";
+        //World Settings Section
+        public static string ActivateTeleportMenuButtonName = "ActivateTeleportMenuButton";
         //Printing Debug Info
         public static string DebugTextFieldName = "DebugTextField";
         public static string DebugInfoButtonName = "PrintDebugInfoButton";
@@ -62,6 +64,8 @@ namespace MyModTesting
         //Bloom Threshold Section
         public static Slider BloomThresholdSlider;
         public static TextMeshProUGUI BloomThresholdNumberText;
+        //World Settings Section
+        public static Button ActivateTeleportMenuButton;
         //Printing Debug Info
         public static TextMeshProUGUI DebugTextField;
         public static Button DebugInfoButton;
@@ -141,6 +145,43 @@ namespace MyModTesting
                 myBloomSettings.threshold.value = BloomThresholdValue;
             }
         }
+
+        //World Settings Section
+        public static void Btn_ActivateTeleportMenuButton()
+        {
+            //Do not activate Teleport Menu if Debug Menu Isn't Open
+            //This is because I want to close the Debug Menu before
+            //Creating the Teleport Menu
+            if (bDebugMenuIsEnabled == false) return;
+
+            ToggleDebugUI();
+
+            GameObject source = Resources.Load("UI/Teleport/TeleportUI") as GameObject;
+            if (source != null)
+            {
+                GameObject TeleportUI = GameObject.Instantiate(source) as GameObject;
+                TeleportMenuUIController teleportUIScript = TeleportUI != null ? TeleportUI.GetComponent<TeleportMenuUIController>() : null;
+                if (teleportUIScript != null)
+                {
+                    StandardSavePoint _closestSavePoint = null;
+                    float _closestDistToPlayer = float.MaxValue;
+                    foreach (var _savePoint in GameObject.FindObjectsOfType<StandardSavePoint>())
+                    {
+                        float _distToPlayer = Vector3.Distance(PlayerController.instance.transform.position, _savePoint.transform.position);
+                        if(_distToPlayer < _closestDistToPlayer)
+                        {
+                            _closestDistToPlayer = _distToPlayer;
+                            _closestSavePoint = _savePoint;
+                        }
+                    }
+                    if (_closestSavePoint != null)
+                    {
+                        teleportUIScript.OnLoadUnlockTeleportList(_closestSavePoint);
+                    }
+                }
+            }
+        }
+
         //Printing Debug Info
         public static void Btn_PrintDebugInfo()
         {
@@ -259,6 +300,14 @@ namespace MyModTesting
                         Btn_PrintDebugInfo();
                     });
                 }
+                else if(_button.transform.name == ActivateTeleportMenuButtonName)
+                {
+                    ActivateTeleportMenuButton = _button;
+                    ActivateTeleportMenuButton.onClick.AddListener(() =>
+                    {
+                        Btn_ActivateTeleportMenuButton();
+                    });
+                }
             }
             foreach (Slider _slider in DebugMenuCanvas.GetComponentsInChildren<Slider>(true))
             {
@@ -321,6 +370,9 @@ namespace MyModTesting
             if (DebugInfoButton != null)
                 DebugInfoButton.onClick.RemoveAllListeners();
 
+            if (ActivateTeleportMenuButton != null)
+                ActivateTeleportMenuButton.onClick.RemoveAllListeners();
+
             if (ConsoleLogToggle != null)
                 ConsoleLogToggle.onValueChanged.RemoveAllListeners();
 
@@ -352,6 +404,8 @@ namespace MyModTesting
             //Bloom Threshold Section
             BloomThresholdSlider = null;
             BloomThresholdNumberText = null;
+            //World Settings Section
+            ActivateTeleportMenuButton = null;
             //Print Debug Info
             DebugTextField = null;
             DebugInfoButton = null;
