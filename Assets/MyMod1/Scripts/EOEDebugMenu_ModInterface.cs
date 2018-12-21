@@ -138,6 +138,20 @@ namespace MyModTesting
         #region UnusedCode
         //if (Input.GetKeyDown(KeyCode.L))
         //{
+        //    Object _object = ModsManager.LoadModAsset(ModID, "TestPrefab1");
+        //    GameObject _gObject;
+        //    if (_object != null && (_gObject = GameObject.Instantiate(_object) as GameObject) != null)
+        //    {
+        //        SpawnFullScreenText("Object Loaded Is " + _gObject.name + " at Position " + _gObject.transform.position);
+        //    }
+        //    else
+        //    {
+        //        SpawnFullScreenText("Couldn't Find Prefab.");
+        //    }
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
         //    if(myBloomSettings != null)
         //    {
         //        SpawnFullScreenText("Bloom intensity is " + myBloomSettings.intensity.value.ToString() + " Threshold: " + myBloomSettings.threshold.value.ToString());
