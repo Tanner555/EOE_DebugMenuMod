@@ -102,7 +102,7 @@ namespace MyModTesting
             b_doOnce = true;
 
             LogCatcher.InitializeLogCatcher(SpawnFullScreenText);
-            MyUIManager.InitializeUIManager(myBloomSettings, sceneProcessLayer, sceneProcessVolume);
+            MyUIManager.InitializeUIManager(ModID, myBloomSettings, sceneProcessLayer, sceneProcessVolume);
         }
 
         public override void OnModDisabled()

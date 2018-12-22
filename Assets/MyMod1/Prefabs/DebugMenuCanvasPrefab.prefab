@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 114626416296609048}
   - component: {fileID: 114421997447226204}
   m_Layer: 5
-  m_Name: TestModCanvas1
+  m_Name: DebugMenuCanvasPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

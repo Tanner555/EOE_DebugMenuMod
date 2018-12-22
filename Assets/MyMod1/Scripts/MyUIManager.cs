@@ -12,6 +12,8 @@ namespace MyModTesting
         #region Fields
         public static bool b_firstTimeInitUI = true;
         public static bool bDebugMenuIsEnabled = false;
+        public static GameObject DebugMenuCanvasObjectReference = null;
+        public static string ModID;
         //Console Log Section
         public static bool bShowConsoleLogs = false;
         public static bool bOnlyShowWarnings = true;
@@ -31,7 +33,7 @@ namespace MyModTesting
 
         #region UIFields
         //Used For Initialization
-        public static string DebugMenuCanvasName = "TestModCanvas1";
+        public static string DebugMenuCanvasName = "DebugMenuCanvasPrefab";
         //Console Log Section
         public static string ConsoleLogToggleName = "ConsoleLogToggle";
         public static string OnlyShowWarningsToggleName = "OnlyShowWarningsToggle";
@@ -212,10 +214,25 @@ namespace MyModTesting
         }
         #endregion
 
+        #region Getters
+        private static GameObject FindOrCreateDebugMenu()
+        {
+            if (DebugMenuCanvasObjectReference == null)
+            {
+                Object _debugPrefab = ModsManager.LoadModAsset(ModID, DebugMenuCanvasName);
+                if (_debugPrefab != null)
+                {
+                    DebugMenuCanvasObjectReference = GameObject.Instantiate(_debugPrefab) as GameObject;
+                }
+            }
+            return DebugMenuCanvasObjectReference;
+        }
+        #endregion
+
         #region OtherCalls
         public static void ToggleDebugUI()
         {
-            GameObject _mycanvas = GameObject.Find(DebugMenuCanvasName);
+            GameObject _mycanvas = FindOrCreateDebugMenu();
             if (_mycanvas != null)
             {
                 Transform _panel = _mycanvas.transform.GetChild(0);
@@ -246,8 +263,9 @@ namespace MyModTesting
         #endregion
 
         #region Initialization
-        public static void InitializeUIManager(Bloom _myBloomSettings, PostProcessLayer _sceneProcessLayer, PostProcessVolume _sceneProcessVolume)
+        public static void InitializeUIManager(string _modID, Bloom _myBloomSettings, PostProcessLayer _sceneProcessLayer, PostProcessVolume _sceneProcessVolume)
         {
+            ModID = _modID;
             myBloomSettings = _myBloomSettings;
             sceneProcessLayer = _sceneProcessLayer;
             sceneProcessVolume = _sceneProcessVolume;
@@ -263,7 +281,7 @@ namespace MyModTesting
 
             ClearUIComponentReferences();
 
-            var _canvas = GameObject.Find(DebugMenuCanvasName);
+            GameObject _canvas = FindOrCreateDebugMenu();
             //Don't Init Components If Can't Find Canvas In Scene
             if (_canvas == null) return;
             //Initialize UI Components

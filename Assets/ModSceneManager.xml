@@ -1,11 +1,2 @@
 <?xml version="1.0"?>
-<ArrayOfModSceneManagerDescription xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <ModSceneManagerDescription>
-    <SceneAlterationMethod>Additive</SceneAlterationMethod>
-    <AffectedSceneMethod>Resources</AffectedSceneMethod>
-    <AffectedScenePath>Assets/EOE/GameMaps/Chapters/Chapter I/AstryanContinent/AstryanContinent.unity</AffectedScenePath>
-    <ReplacementMethod>AssetBundlesModKit</ReplacementMethod>
-    <ReplacementPath>TestSceneMod1</ReplacementPath>
-    <ReplacementModID>eoe_debug_menu_mod</ReplacementModID>
-  </ModSceneManagerDescription>
-</ArrayOfModSceneManagerDescription>
+<ArrayOfModSceneManagerDescription xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
