@@ -9,7 +9,7 @@ namespace MyModTesting
         // Use this for initialization
         void Start()
         {
-            
+            //EOEDebugMenu_ModInterface.SpawnFullScreenText("Hello from Start");
         }
 
         // Update is called once per frame

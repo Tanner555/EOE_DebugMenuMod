@@ -12,7 +12,7 @@ namespace MyModTesting
         #region Fields
         private bool b_doOnce = false;
         
-        private GameObject lastShownTextObject = null;
+        private static GameObject lastShownTextObject = null;
         PostProcessVolume m_Volume = null;
         PostProcessProfile m_Profile = null;
         //Console Log Section
@@ -119,7 +119,7 @@ namespace MyModTesting
         #endregion
 
         #region OtherCalls
-        private void SpawnFullScreenText(string msg)
+        public static void SpawnFullScreenText(string msg)
         {
             if(lastShownTextObject != null)
             {
@@ -142,7 +142,7 @@ namespace MyModTesting
         //    GameObject _gObject;
         //    if (_object != null && (_gObject = GameObject.Instantiate(_object) as GameObject) != null)
         //    {
-        //        SpawnFullScreenText("Object Loaded Is " + _gObject.name + " at Position " + _gObject.transform.position);
+        //        _gObject.AddComponent<TestPrefabScript>();
         //    }
         //    else
         //    {
