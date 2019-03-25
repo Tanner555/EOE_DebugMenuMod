@@ -29,6 +29,8 @@ namespace MyModTesting
         public static Bloom myBloomSettings;
         public static PostProcessLayer sceneProcessLayer;
         public static PostProcessVolume sceneProcessVolume;
+        //Used For Showing Text On Screen
+        private static System.Action<string> ShowTextAction = null;
         #endregion
 
         #region UIFields
@@ -232,43 +234,62 @@ namespace MyModTesting
         #region OtherCalls
         public static void ToggleDebugUI()
         {
-            GameObject _mycanvas = FindOrCreateDebugMenu();
-            if (_mycanvas != null)
+            try
             {
-                Transform _panel = _mycanvas.transform.GetChild(0);
-                if (_panel != null && _panel.gameObject)
+                GameObject _mycanvas = FindOrCreateDebugMenu();
+                if (_mycanvas != null)
                 {
-                    bool _bActive = !_panel.gameObject.activeSelf;
-                    if (_bActive && (PlayerController.instance.UIPresence ||
-                        PlayerController.instance.MoveLock))
+                    Transform _panel = _mycanvas.transform.GetChild(0);
+                    if (_panel != null && _panel.gameObject)
                     {
-                        //Do Not Activate Debug Menu If Another UI Is Present Or Player Cannot Move
-                        return;
-                    }
-                    _panel.gameObject.SetActive(_bActive);
-                    bDebugMenuIsEnabled = _bActive;
-                    (CameraMgr.GetCurrentExplorationCamera() as ExplorationFreeCamera).LockCam = _bActive;
-                    PlayerController.instance.UIPresence = _bActive;
-                    PlayerController.instance.MoveLock = _bActive;
-                    CoreWorker.instance.ShowCursor = _bActive;
-                    Cursor.visible = _bActive;
-                    if (_bActive)
-                    {
-                        //Only Initialize If Toggling Enabled
-                        InitializeUIComponents();
+                        bool _bActive = !_panel.gameObject.activeSelf;
+                        if (_bActive && (PlayerController.instance.UIPresence ||
+                            PlayerController.instance.MoveLock))
+                        {
+                            //Do Not Activate Debug Menu If Another UI Is Present Or Player Cannot Move
+                            return;
+                        }
+                        _panel.gameObject.SetActive(_bActive);
+                        bDebugMenuIsEnabled = _bActive;
+                        (CameraMgr.GetCurrentExplorationCamera() as ExplorationFreeCamera).LockCam = _bActive;
+                        PlayerController.instance.UIPresence = _bActive;
+                        PlayerController.instance.MoveLock = _bActive;
+                        CoreWorker.instance.ShowCursor = _bActive;
+                        Cursor.visible = _bActive;
+                        if (_bActive)
+                        {
+                            //Only Initialize If Toggling Enabled
+                            InitializeUIComponents();
+                        }
                     }
                 }
+            }
+            catch(System.Exception ex)
+            {
+                InvokeVisibleText("MyUIManager Error: " + ex.Message);
+            }
+        }
+
+        private static void InvokeVisibleText(string msg)
+        {
+            if (ShowTextAction != null)
+            {
+                ShowTextAction(msg);
             }
         }
         #endregion
 
         #region Initialization
-        public static void InitializeUIManager(string _modID, Bloom _myBloomSettings, PostProcessLayer _sceneProcessLayer, PostProcessVolume _sceneProcessVolume)
+        public static void InitializeUIManager(string _modID, Bloom _myBloomSettings, PostProcessLayer _sceneProcessLayer, PostProcessVolume _sceneProcessVolume, System.Action<string> showTextAction)
         {
             ModID = _modID;
             myBloomSettings = _myBloomSettings;
             sceneProcessLayer = _sceneProcessLayer;
             sceneProcessVolume = _sceneProcessVolume;
+            if (showTextAction != null)
+            {
+                ShowTextAction = showTextAction;
+            }
         }
 
         public static void InitializeUIComponents()

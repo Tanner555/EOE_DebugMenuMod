@@ -102,7 +102,7 @@ namespace MyModTesting
             b_doOnce = true;
 
             LogCatcher.InitializeLogCatcher(SpawnFullScreenText);
-            MyUIManager.InitializeUIManager(ModID, myBloomSettings, sceneProcessLayer, sceneProcessVolume);
+            MyUIManager.InitializeUIManager(ModID, myBloomSettings, sceneProcessLayer, sceneProcessVolume, SpawnFullScreenText);
         }
 
         public override void OnModDisabled()
@@ -129,10 +129,6 @@ namespace MyModTesting
             lastShownTextObject = GameObject.Instantiate(gob);
             lastShownTextObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = msg;
         }
-        #endregion
-
-        #region Initialization
-
         #endregion
 
         #region UnusedCode
