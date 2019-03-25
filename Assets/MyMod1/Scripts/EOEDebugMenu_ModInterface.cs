@@ -83,8 +83,9 @@ namespace MyModTesting
         public override void OnIngameUpdate()
         {
             //More Than Once
-            if (Input.GetKeyDown(KeyCode.K))
+            if (Input.GetKeyDown(KeyCode.K) && MyUIManager.bDebugMenuIsEnabled == false)
             {
+                //Only Toggle Debug UI When 'K' is Pressed And Debug Menu is OFF
                 MyUIManager.ToggleDebugUI();
             }
 

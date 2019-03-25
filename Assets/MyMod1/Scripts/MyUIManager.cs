@@ -36,6 +36,8 @@ namespace MyModTesting
         #region UIFields
         //Used For Initialization
         public static string DebugMenuCanvasName = "DebugMenuCanvasPrefab";
+        //Title Panel Section
+        public static string ExitDebugMenuButtonName = "ExitDebugMenuButton";
         //Console Log Section
         public static string ConsoleLogToggleName = "ConsoleLogToggle";
         public static string OnlyShowWarningsToggleName = "OnlyShowWarningsToggle";
@@ -56,6 +58,8 @@ namespace MyModTesting
 
         //UI Components
         public static GameObject DebugMenuCanvas;
+        //Title Panel Section
+        public static Button ExitDebugMenuButton;
         //Console Log Section
         public static Toggle ConsoleLogToggle;
         public static Toggle OnlyShowWarningsToggle;
@@ -81,6 +85,8 @@ namespace MyModTesting
             get
             {
                 return DebugMenuCanvas &&
+                    //Title Panel Section
+                    ExitDebugMenuButton &&
                     //Console Log Section
                     ConsoleLogToggle && OnlyShowWarningsToggle && LogFrequencySlider && LogFrequencyNumberText &&
                     //Printing Debug Info
@@ -90,6 +96,12 @@ namespace MyModTesting
         #endregion
 
         #region PublicUICalls
+        //Title Panel Section
+        public static void Btn_ExitDebugMenuButton()
+        {
+            ToggleDebugUI();
+        }
+
         //Console Log Section
         public static void Toggle_ConsoleLogToggle(bool _enabled)
         {
@@ -347,6 +359,14 @@ namespace MyModTesting
                         Btn_ActivateTeleportMenuButton();
                     });
                 }
+                else if(_button.transform.name == ExitDebugMenuButtonName)
+                {
+                    ExitDebugMenuButton = _button;
+                    ExitDebugMenuButton.onClick.AddListener(() =>
+                    {
+                        Btn_ExitDebugMenuButton();
+                    });
+                }
             }
             foreach (Slider _slider in DebugMenuCanvas.GetComponentsInChildren<Slider>(true))
             {
@@ -412,6 +432,9 @@ namespace MyModTesting
             if (ActivateTeleportMenuButton != null)
                 ActivateTeleportMenuButton.onClick.RemoveAllListeners();
 
+            if (ExitDebugMenuButton != null)
+                ExitDebugMenuButton.onClick.RemoveAllListeners();
+
             if (ConsoleLogToggle != null)
                 ConsoleLogToggle.onValueChanged.RemoveAllListeners();
 
@@ -431,6 +454,8 @@ namespace MyModTesting
                 BloomIntensitySlider.onValueChanged.RemoveAllListeners();
 
             DebugMenuCanvas = null;
+            //Title Panel Section
+            ExitDebugMenuButton = null;
             //Console Log Section
             ConsoleLogToggle = null;
             OnlyShowWarningsToggle = null;
